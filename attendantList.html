@@ -16,6 +16,36 @@
       /* 要判斷使用者角色，避免不應該看到的人進到此頁面 */
         // 提示 1 : 將非老師的角色轉址到 index 頁面
         // 提示 2 : 將未登入的使用者轉指導 logIn 頁面
+	  var current=Parse.User.current();
+	  if(current){
+		  if(current.get('rank')!=1){
+		  window.location="index.html";
+		  }
+		  else{
+			  var Std=Parse.Object.extend('User');
+			  var std= new Parse.Query(Std);
+			  std.equalTo('rank',0);
+			  std.equalTo('signature',1);
+			  std.find({
+				  success:function(data){
+					  for(var i=0;i<data.length;i++){
+						  $('#table').append(data[i].get('username'));
+					  }
+				  },
+				  error:function(data,error){
+					  alert("error");
+				  }
+				
+			  });
+			
+			
+		  }
+		
+	  }
+	  else{
+		  window.location="logIn.html";
+	  }
+
 
       /* 請閱讀完 html 後在這裡填入送出表單後需要執行的程式碼 */
         // 提示 1 : 挑選符合條件的使用者
