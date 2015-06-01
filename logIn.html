@@ -14,6 +14,30 @@
     $(document).on('submit','#logInForm',function(e){
       console.log('logIn submit');
       /* 請閱讀完 html 後在這裡填入送出表單後需要執行的程式碼 */
+	  e.preventDefault();
+	  var usr=$("#username").val();
+	  var password=$("#password").val();
+	  
+	  Parse.User.logIn(usr,password,{
+		  success:function(data){
+			  alert("success");
+			  var current=Parse.User.current();
+			  current.set("signature",1);
+			  current.save(null,{
+				  success:function(data){
+					  alert("update completely");
+					  window.location="index.html";
+				  },
+				  error:function(data,error){
+					  alert("sorry");
+				  }
+			  });
+		  },
+		  error:function(data,error){
+			  alert("fail");
+		  }
+	  });
+	  
         // 提示1 : 記得使用 preventDefault 方程 避免表單轉址
         // 提示2 : 請在使用者登入成功後，自動幫助使用者簽到，
         // 提示3 : 簽到成功後，要將畫面切換到 index 頁面
